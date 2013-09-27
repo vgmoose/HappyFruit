@@ -33,7 +33,8 @@ public class Fruit
 		{
 			if (fallen || field[x/40][y/40+1] != null)
 			{
-				//y = 340;
+				y = ((int)(y/40))*40;
+				
 				field[x/40][y/40] = this;
 				fallen = true;
 			}

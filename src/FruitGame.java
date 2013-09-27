@@ -105,6 +105,7 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener
 			field.remove(fruit);
 			matrix[x][y] = null;
 			
+			
 			if (matrix[x][y-1] != null)
 				startFalling(matrix[x][y-1], x, y-1);
 			
