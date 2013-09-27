@@ -12,12 +12,12 @@ public class Main extends JFrame
 {
 	public static void main(String[] args)
 	{
-		Display d = new Display(400, 380);
+		FruitGame d = new FruitGame(400, 380);
 		Main m = new Main(d);
 
 	}
 	
-	public Main(Display d)
+	public Main(FruitGame d)
 	{
 		this.add(d);
 		this.pack();
