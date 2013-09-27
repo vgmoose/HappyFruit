@@ -1,19 +1,16 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+
 
 import javax.swing.*;
 
 public class Main extends JFrame
 {
+
+	private static final long serialVersionUID = 1L;
+
 	public static void main(String[] args)
 	{
 		FruitGame d = new FruitGame(400, 380);
-		Main m = new Main(d);
+		new Main(d);
 
 	}
 	
