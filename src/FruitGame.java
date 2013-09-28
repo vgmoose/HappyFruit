@@ -4,12 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class FruitGame extends JPanel implements ActionListener, MouseListener
+public class FruitGame extends JPanel implements ActionListener, MouseListener, MouseMotionListener
 {
 	private static final long serialVersionUID = 1L;
 	LinkedList<Fruit> field = new LinkedList<Fruit>();
@@ -40,13 +42,13 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener
 
 	public void drawAllFruit(Graphics g)
 	{
-		for (Fruit f : field)
+		for( Iterator<Fruit> it = field.descendingIterator(); it.hasNext(); )
 		{
-			if (f!=null)
-			{
-				g.setColor(f.type);
-				g.fillRect(f.x, f.y, 40, 40);
-			}
+			Fruit f = it.next();
+
+			g.setColor(f.type);
+
+			g.fillRect(f.x, f.y, 40, 40);
 		}
 	}
 
@@ -62,7 +64,7 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener
 		if (counter%50 == 0)
 			createNewFruit((int)(Math.random()*10));
 
-		counter ++;
+		counter++;
 
 		LinkedList<Fruit> doneFalling = new LinkedList<Fruit>();
 
@@ -82,20 +84,24 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener
 
 	}
 
-	
+
 	public void mouseClicked(MouseEvent arg0) 
 	{
 		int x = arg0.getX()/40;
 		int y = arg0.getY()/40;
 
-		//matrix[x/40][y/40].type = Color.black;
 		removeFruit(matrix[x][y], x, y);			
 
 	}
 
-	private void startFalling(Fruit fruit, int x, int y) {
-		fallingQueue.add(fruit);
-		matrix[x][y] = null;
+	private void startFalling(Fruit fruit, int x, int y) 
+	{
+
+		if (matrix[x][y] != null)
+		{
+			fallingQueue.add(fruit);
+			matrix[x][y] = null;
+		}
 
 		if (matrix[x][y-1] != null)
 			startFalling(matrix[x][y-1], x, y-1);
@@ -106,33 +112,42 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener
 		field.remove(fruit);
 		matrix[x][y] = null;
 
-
-		if (matrix[x][y-1] != null)
-			startFalling(matrix[x][y-1], x, y-1);
-
+		startFalling(matrix[x][y-1], x, y-1);
 	}
 
-	
+
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
+
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
+
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
+
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

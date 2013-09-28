@@ -23,26 +23,17 @@ public class Fruit
 	{
 		boolean fallen = false;
 
-		if (y >= 340)
+		fallen = (y >= 340 || (field[x/40][y/40+1] != null && y >= ((int)(y/40))*40 + 20));
+
+		if (fallen)
 		{
-			y = 320;
+			y = ((int)(y/40))*40;
+
+			field[x/40][y/40] = this;
 			fallen = true;
 		}
-
-		if (y >=0)
-		{
-			if (fallen || field[x/40][y/40+1] != null)
-			{
-				y = ((int)(y/40))*40;
-				
-				field[x/40][y/40] = this;
-				fallen = true;
-			}
-			else
-				y+= 5;
-		}
 		else
-			y += 5;
+			y+= 5;
 
 		return fallen;
 
