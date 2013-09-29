@@ -21,7 +21,6 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	Timer timer;
 	int counter = 0;
 
-
 	FruitGame(int h, int w)
 	{
 		super();
@@ -31,6 +30,7 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 		timer = new Timer(17, this);	
 		timer.start();
 		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
 	}
 
 	public void createNewFruit(int row)
@@ -87,10 +87,6 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 
 	public void mouseClicked(MouseEvent arg0) 
 	{
-		int x = arg0.getX()/40;
-		int y = arg0.getY()/40;
-
-		removeFruit(matrix[x][y], x, y);			
 
 	}
 
@@ -141,7 +137,11 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		int x = arg0.getX()/40;
+		int y = arg0.getY()/40;
+
+		removeFruit(matrix[x][y], x, y);			
+
 		
 	}
 
