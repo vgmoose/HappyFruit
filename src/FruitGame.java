@@ -21,6 +21,9 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	Timer timer;
 	int counter = 0;
 
+	int mouseCoorX, mouseCoorY;
+	private Fruit chosenFruit;
+	
 	FruitGame(int h, int w)
 	{
 		super();
@@ -31,7 +34,11 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 		timer.start();
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
-	}
+		
+//		for (int x=0; x<10; x++)
+//			if (x!=5)
+//				createNewFruit(x);
+	}	
 
 	public void createNewFruit(int row)
 	{
@@ -62,7 +69,10 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	public void actionPerformed(ActionEvent arg0) 
 	{
 		if (counter%50 == 0)
+		{
 			createNewFruit((int)(Math.random()*10));
+
+		}
 
 		counter++;
 
@@ -124,23 +134,60 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	}
 
 
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void mousePressed(MouseEvent arg0) 
+	{
+		mouseCoorX = arg0.getX();
+		mouseCoorY = arg0.getY();
+		
+		
 	}
 
 
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+
 
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		int x = arg0.getX()/40;
-		int y = arg0.getY()/40;
 
-		removeFruit(matrix[x][y], x, y);			
+		int mouseDiffX = arg0.getX() - mouseCoorX;
+		int mouseDiffY = arg0.getY() - mouseCoorY;
+		
+		if (Math.abs(mouseDiffX) > Math.abs(mouseDiffY))
+			mouseDiffY = 0;
+		else
+			mouseDiffX = 0;
+		
+		for (int x=0; x<10; x++)
+		{
+			if (mouseDiffY == 0)
+			{
+				if (matrix[x][mouseCoorY/40] != null)
+				{
+					matrix[x][mouseCoorY/40].applyDiff(mouseDiffX, mouseDiffY, matrix);
+					startFalling(matrix[x][mouseCoorY/40], x, mouseCoorY/40);
+				}
+			}
+			else 
+			{
+				if (matrix[mouseCoorX/40][x] != null)
+				{
+					//matrix[mouseCoorX/40][x].applyDiff(mouseDiffX, mouseDiffY, matrix);
+					//startFalling(matrix[mouseCoorX/40][x], x, mouseCoorY/40);
+				}
+			}
+		}
+		
+		mouseCoorX = arg0.getX();
+		mouseCoorY = arg0.getY();
+
+		
+//		int x = arg0.getX()/40;
+//		int y = arg0.getY()/40;
+
+		//removeFruit(matrix[x][y], x, y);		
+		
 
 		
 	}
