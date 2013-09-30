@@ -25,6 +25,7 @@ public class Fruit
 	{
 		boolean fallen = false;
 
+
 		fallen = (y >= (320 + animateOffset) || (belowFruit(field) != null && y >= ((int)(y/40))*40 + animateOffset));
 
 		if (fallen)
@@ -75,6 +76,15 @@ public class Fruit
 	{
 		x += mouseDiffX;
 		y += mouseDiffY;
+		
+	}
+
+	public void moveHorizontal(int i) 
+	{
+		x += i;
+		
+		if (x<0)
+			x = 360;
 		
 	}
 

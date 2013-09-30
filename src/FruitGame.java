@@ -65,6 +65,24 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 
 		drawAllFruit(g);
 	}
+	
+	public void moveRowLeft(int row)
+	{
+		Fruit temp = matrix[0][row];
+
+		for (int x=0; x<10; x++)
+		{
+			if (matrix[x][row] != null)
+			{
+				matrix[x][row].moveHorizontal(-40);
+			}
+			
+			startFalling(matrix[x][row], x, row);
+
+
+		}
+
+	}
 
 	public void actionPerformed(ActionEvent arg0) 
 	{
@@ -139,6 +157,8 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 		mouseCoorX = arg0.getX();
 		mouseCoorY = arg0.getY();
 		
+		moveRowLeft(arg0.getY()/40);
+		
 		
 	}
 
@@ -150,44 +170,44 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-
-		int mouseDiffX = arg0.getX() - mouseCoorX;
-		int mouseDiffY = arg0.getY() - mouseCoorY;
-		
-		if (Math.abs(mouseDiffX) > Math.abs(mouseDiffY))
-			mouseDiffY = 0;
-		else
-			mouseDiffX = 0;
-		
-		for (int x=0; x<10; x++)
-		{
-			if (mouseDiffY == 0)
-			{
-				if (matrix[x][mouseCoorY/40] != null)
-				{
-					matrix[x][mouseCoorY/40].applyDiff(mouseDiffX, mouseDiffY, matrix);
-					startFalling(matrix[x][mouseCoorY/40], x, mouseCoorY/40);
-				}
-			}
-			else 
-			{
-				if (matrix[mouseCoorX/40][x] != null)
-				{
-					//matrix[mouseCoorX/40][x].applyDiff(mouseDiffX, mouseDiffY, matrix);
-					//startFalling(matrix[mouseCoorX/40][x], x, mouseCoorY/40);
-				}
-			}
-		}
-		
-		mouseCoorX = arg0.getX();
-		mouseCoorY = arg0.getY();
-
-		
-//		int x = arg0.getX()/40;
-//		int y = arg0.getY()/40;
-
-		//removeFruit(matrix[x][y], x, y);		
-		
+//
+//		int mouseDiffX = arg0.getX() - mouseCoorX;
+//		int mouseDiffY = arg0.getY() - mouseCoorY;
+//		
+//		if (Math.abs(mouseDiffX) > Math.abs(mouseDiffY))
+//			mouseDiffY = 0;
+//		else
+//			mouseDiffX = 0;
+//		
+//		for (int x=0; x<10; x++)
+//		{
+//			if (mouseDiffY == 0)
+//			{
+//				if (matrix[x][mouseCoorY/40] != null)
+//				{
+//					matrix[x][mouseCoorY/40].applyDiff(mouseDiffX, mouseDiffY, matrix);
+//					startFalling(matrix[x][mouseCoorY/40], x, mouseCoorY/40);
+//				}
+//			}
+//			else 
+//			{
+//				if (matrix[mouseCoorX/40][x] != null)
+//				{
+//					//matrix[mouseCoorX/40][x].applyDiff(mouseDiffX, mouseDiffY, matrix);
+//					//startFalling(matrix[mouseCoorX/40][x], x, mouseCoorY/40);
+//				}
+//			}
+//		}
+//		
+//		mouseCoorX = arg0.getX();
+//		mouseCoorY = arg0.getY();
+//
+//		
+////		int x = arg0.getX()/40;
+////		int y = arg0.getY()/40;
+//
+//		//removeFruit(matrix[x][y], x, y);		
+//		
 
 		
 	}
