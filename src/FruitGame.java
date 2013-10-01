@@ -66,10 +66,21 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 		drawAllFruit(g);
 	}
 	
+	public void moveColDown(int col)
+	{
+		for (int x=0; x<10; x++)
+		{
+			if (matrix[col][x] != null)
+			{
+				matrix[col][x].moveVertical(40);
+			}
+			
+			startFalling(matrix[col][x], col, x);
+		}
+	}
+	
 	public void moveRowLeft(int row)
 	{
-		Fruit temp = matrix[0][row];
-
 		for (int x=0; x<10; x++)
 		{
 			if (matrix[x][row] != null)
@@ -78,11 +89,24 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 			}
 			
 			startFalling(matrix[x][row], x, row);
-
-
 		}
-
 	}
+	
+	public void moveRowRight(int row)
+	{
+		Fruit temp = matrix[0][row];
+
+		for (int x=0; x<10; x++)
+		{
+			if (matrix[x][row] != null)
+			{
+				matrix[x][row].moveHorizontal(40);
+			}
+			
+			startFalling(matrix[x][row], x, row);
+		}
+	}
+
 
 	public void actionPerformed(ActionEvent arg0) 
 	{
@@ -127,7 +151,7 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 			matrix[x][y] = null;
 		}
 
-		if (matrix[x][y-1] != null)
+		if (y>0 && matrix[x][y-1] != null)
 			startFalling(matrix[x][y-1], x, y-1);
 
 	}
@@ -154,10 +178,12 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 
 	public void mousePressed(MouseEvent arg0) 
 	{
-		mouseCoorX = arg0.getX();
-		mouseCoorY = arg0.getY();
-		
-		moveRowLeft(arg0.getY()/40);
+//		mouseCoorX = arg0.getX();
+//		mouseCoorY = arg0.getY();
+//		
+//		moveRowLeft(arg0.getY()/40);
+		mouseCoorX = arg0.getX()/40;
+		mouseCoorY = arg0.getY()/40;
 		
 		
 	}
@@ -169,10 +195,21 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
-//
-//		int mouseDiffX = arg0.getX() - mouseCoorX;
-//		int mouseDiffY = arg0.getY() - mouseCoorY;
+	public void mouseDragged(MouseEvent arg0) 
+	{
+		int mouseClickX = arg0.getX()/40;
+		int mouseClickY = arg0.getY()/40;
+		
+		if (mouseClickX < mouseCoorX)
+			moveRowLeft(mouseClickY);
+		else if (mouseClickX > mouseCoorX)
+			moveRowRight(mouseClickY);
+		else if (mouseClickY > mouseCoorY)
+			moveColDown(mouseClickX);
+			
+		mouseCoorX = mouseClickX;
+		mouseCoorY = mouseClickY;
+
 //		
 //		if (Math.abs(mouseDiffX) > Math.abs(mouseDiffY))
 //			mouseDiffY = 0;
