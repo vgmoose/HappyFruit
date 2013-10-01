@@ -5,6 +5,7 @@ public class Fruit
 {
 	int x, y;
 	Color type;
+	int count;
 	
 	int animateOffset = 20;
 
@@ -37,14 +38,11 @@ public class Fruit
 		if (fallen)
 		{
 			y = ((int)(y/40))*40;
-			
-			if (animateOffset == 20)
-				x = ((int)(x/40))*40;
 
 			if (field[x/40][y/40] == null)
 				field[x/40][y/40] = this;
 			else
-				return false;
+				fallen = true;
 
 			fallen = true;
 			animateOffset = 0;
@@ -52,9 +50,10 @@ public class Fruit
 		else
 		{
 			y+= 5;
-			x = ((int)(x/40))*40;
-			animateOffset = 0;
+			animateOffset = 20;
 		}
+		
+		System.out.println("falling");
 
 		return fallen;
 
@@ -109,6 +108,63 @@ public class Fruit
 			y = -40;
 		}
 		
+	}
+
+	public boolean moveRight(Fruit[][] field) 
+	{
+		boolean moved = false;
+
+		moved = count>=9;
+
+		if (moved)
+		{
+			x = ((int)(x/40))*40;
+
+
+			field[x/40][y/40] = this;
+
+			moved = true;
+			animateOffset = 0;
+			count = 0;
+		}
+		else
+		{
+			x += 5;
+			count ++;
+			animateOffset = 20;
+			if (x > 380)
+				x = -20;
+		}
+
+		return moved;
+	}
+
+	public boolean moveLeft(Fruit[][] field) 
+	{
+		boolean moved = false;
+
+		moved = count>=9;
+
+		if (moved)
+		{
+			x = ((int)(x/40)+1)*40;
+
+			field[x/40][y/40] = this;
+
+			moved = true;
+			animateOffset = 0;
+			count = 0;
+		}
+		else
+		{
+			x -= 5;
+			count ++;
+			animateOffset = 20;
+			if (x < -20)
+				x = 380;
+		}
+
+		return moved;
 	}
 
 }

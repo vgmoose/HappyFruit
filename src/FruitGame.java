@@ -16,6 +16,10 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	private static final long serialVersionUID = 1L;
 	LinkedList<Fruit> field = new LinkedList<Fruit>();
 	LinkedList<Fruit> fallingQueue = new LinkedList<Fruit>();
+	LinkedList<Fruit> moveRightQueue = new LinkedList<Fruit>();
+	LinkedList<Fruit> moveLeftQueue = new LinkedList<Fruit>();
+
+
 	Fruit[][] matrix = new Fruit[10][10];
 
 	Timer timer;
@@ -37,7 +41,7 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 		
 //		for (int x=0; x<10; x++)
 //			if (x!=5)
-//				createNewFruit(x);
+				createNewFruit(5);
 	}	
 
 	public void createNewFruit(int row)
@@ -85,7 +89,7 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 		{
 			if (matrix[x][row] != null)
 			{
-				matrix[x][row].moveHorizontal(-40);
+				moveLeftQueue.add(matrix[x][row]);
 			}
 			
 			startFalling(matrix[x][row], x, row);
@@ -94,13 +98,11 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	
 	public void moveRowRight(int row)
 	{
-		Fruit temp = matrix[0][row];
-
 		for (int x=0; x<10; x++)
 		{
 			if (matrix[x][row] != null)
 			{
-				matrix[x][row].moveHorizontal(40);
+				moveRightQueue.add(matrix[x][row]);
 			}
 			
 			startFalling(matrix[x][row], x, row);
@@ -113,17 +115,50 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 		if (counter%50 == 0)
 		{
 			createNewFruit((int)(Math.random()*10));
+//			createNewFruit(3);
+
 
 		}
 
 		counter++;
 
 		LinkedList<Fruit> doneFalling = new LinkedList<Fruit>();
+		LinkedList<Fruit> doneMovingHorizontally = new LinkedList<Fruit>();
+
+
+		for (Fruit f : moveRightQueue)
+		{
+			if (f.moveRight(matrix))
+				doneMovingHorizontally.add(f);
+		}
+		
+		for (Fruit f : moveLeftQueue)
+		{
+			if (f.moveLeft(matrix))
+				doneMovingHorizontally.add(f);
+		}
+		
+		
+		for (Fruit f : doneMovingHorizontally)
+		{
+			moveRightQueue.remove(f);
+			moveLeftQueue.remove(f);
+
+			//field.remove(f);
+		}
+		
+		
+		System.out.println("Fall: "+fallingQueue);
+		System.out.println("Right: "+moveRightQueue);
+		System.out.println("Left: "+moveLeftQueue);
+
 
 		for (Fruit f : fallingQueue)
 		{
-			if (f.fall(matrix))
+			if (!moveRightQueue.contains(f) && !moveLeftQueue.contains(f) && f.fall(matrix))
+			{
 				doneFalling.add(f);
+			}
 		}
 
 		for (Fruit f : doneFalling)
@@ -131,6 +166,7 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 			fallingQueue.remove(f);
 			//field.remove(f);
 		}
+
 
 		repaint();
 
