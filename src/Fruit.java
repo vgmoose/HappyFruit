@@ -147,7 +147,9 @@ public class Fruit
 
 		if (moved)
 		{
-			x = ((int)(x/40)+1)*40;
+			int divisor = (x<20 || x == 360)? 0 : 1;
+			
+			x = ((int)(x/40)+divisor)*40;
 
 			field[x/40][y/40] = this;
 
@@ -161,7 +163,9 @@ public class Fruit
 			count ++;
 			animateOffset = 20;
 			if (x < -20)
+			{
 				x = 380;
+			}
 		}
 
 		return moved;
