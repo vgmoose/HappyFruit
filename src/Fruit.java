@@ -7,15 +7,37 @@ public class Fruit
 	Color type;
 	int count;
 	
+	static int totalFruit = 0;
+	
+	int id;
+	
+	int oldX, oldY;
+	
 	int animateOffset = 20;
 
 	public Fruit(int col)
 	{
 		y = -40; 
 		x = col*40;
+		
+		totalFruit++;
+		id = totalFruit;
 
-		type = new Color((int)(Math.random()*256),(int)(Math.random()*256),(int)(Math.random()*256));
+		type = randomColor();
 
+	}
+	
+	public Color getColor()
+	{
+		if (type.getRed() >= 250 || type.getBlue() >= 250 || type.getGreen() >= 250)
+			return randomColor();
+		else
+			return type;
+	}
+	
+	public Color randomColor()
+	{
+		return new Color((int)(Math.random()*256),(int)(Math.random()*256),(int)(Math.random()*256));
 	}
 
 	public boolean fall(Fruit[][] field)
@@ -28,6 +50,11 @@ public class Fruit
 		return hasFallen(field, fakefall);
 	}
 
+	public void storeOldValues(int x, int y)
+	{
+		oldX = x;
+		oldY = y;
+	}
 
 	public boolean hasFallen(Fruit[][] field, boolean fakefall)
 	{
@@ -49,6 +76,11 @@ public class Fruit
 		}
 		else
 		{
+//			if (y/40 > 0)
+//			{
+//			field[x/40][y/40-1] = null;
+//			field[x/40][y/40] = this;
+//			}
 			y+= 5;
 			animateOffset = 20;
 		}
@@ -115,6 +147,9 @@ public class Fruit
 		boolean moved = false;
 
 		moved = count>=9;
+		
+		if (count==0)
+			storeOldValues(x, y);
 
 		if (moved)
 		{
@@ -144,6 +179,9 @@ public class Fruit
 		boolean moved = false;
 
 		moved = count>=9;
+		
+		if (count==0)
+			storeOldValues(x, y);
 
 		if (moved)
 		{

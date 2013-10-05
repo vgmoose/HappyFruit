@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 public class FruitGame extends JPanel implements ActionListener, MouseListener, MouseMotionListener
@@ -41,7 +42,7 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 		
 //		for (int x=0; x<10; x++)
 //			if (x!=5)
-				createNewFruit(5);
+//				createNewFruit(5);
 	}	
 
 	public void createNewFruit(int row)
@@ -53,21 +54,41 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 
 	public void drawAllFruit(Graphics g)
 	{
+		super.paintComponent(g);
+
 		for( Iterator<Fruit> it = field.descendingIterator(); it.hasNext(); )
 		{
 			Fruit f = it.next();
 
-			g.setColor(f.type);
+			g.setColor(f.getColor());
 
 			g.fillRect(f.x, f.y, 40, 40);
+		}
+	}
+	
+	public void drawMatrixContents(Graphics g)
+	{
+		g.setColor(Color.BLACK);
+		g.drawString("", 0,0);
+
+		
+		for (int x=0; x<matrix.length; x++)
+		{
+			for (int y=0; y<matrix[x].length; y++)
+			{
+				if (matrix[x][y] != null)
+				{
+					String spacer = (matrix[x][y].id<10)? " " : "";
+					g.drawString(spacer+matrix[x][y].id, 12+x*40, 23+y*40);
+				}
+			}
 		}
 	}
 
 	public void paintComponent(Graphics g)
 	{			
-		super.paintComponent(g);
-
 		drawAllFruit(g);
+		drawMatrixContents(g);
 	}
 	
 	public void moveColDown(int col)
@@ -87,12 +108,14 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	{
 		for (int x=0; x<10; x++)
 		{
-			if (matrix[x][row] != null)
+			Fruit f = matrix[x][row];
+			if (f != null)
 			{
-				moveLeftQueue.add(matrix[x][row]);
+				moveLeftQueue.add(f);
+				matrix[x][row] = null;
 			}
 			
-			startFalling(matrix[x][row], x, row);
+			startFalling(f, x, row);
 		}
 	}
 	
@@ -100,12 +123,14 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	{
 		for (int x=0; x<10; x++)
 		{
-			if (matrix[x][row] != null)
+			Fruit f = matrix[x][row];
+			if (f != null)
 			{
-				moveRightQueue.add(matrix[x][row]);
+				moveRightQueue.add(f);
+				matrix[x][row] = null;
 			}
 			
-			startFalling(matrix[x][row], x, row);
+			startFalling(f, x, row);
 		}
 	}
 
@@ -114,7 +139,7 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	{
 		if (counter%50 == 0)
 		{
-			createNewFruit((int)(Math.random()*10));
+			//createNewFruit((int)(Math.random()*10));
 //			createNewFruit(3);
 
 
@@ -143,14 +168,21 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 		{
 			moveRightQueue.remove(f);
 			moveLeftQueue.remove(f);
+//
+//			if (matrix[f.oldX/40][f.oldY/40] == f)
+//			{
+//				matrix[f.oldX/40][f.oldY/40] = null;
+//			}
+			
+			fallingQueue.add(f);
 
 			//field.remove(f);
 		}
 		
 		
-		System.out.println("Fall: "+fallingQueue);
-		System.out.println("Right: "+moveRightQueue);
-		System.out.println("Left: "+moveLeftQueue);
+//		System.out.println("Fall: "+fallingQueue);
+//		System.out.println("Right: "+moveRightQueue);
+//		System.out.println("Left: "+moveLeftQueue);
 
 
 		for (Fruit f : fallingQueue)
@@ -175,7 +207,9 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 
 	public void mouseClicked(MouseEvent arg0) 
 	{
-
+		if(SwingUtilities.isRightMouseButton(arg0)){
+			createNewFruit(arg0.getX()/40);
+		}
 	}
 
 	private void startFalling(Fruit fruit, int x, int y) 
