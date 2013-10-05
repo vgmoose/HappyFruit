@@ -139,7 +139,7 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	{
 		if (counter%50 == 0)
 		{
-			//createNewFruit((int)(Math.random()*10));
+//			createNewFruit((int)(Math.random()*10));
 //			createNewFruit(3);
 
 

@@ -29,7 +29,8 @@ public class Fruit
 	
 	public Color getColor()
 	{
-		if (type.getRed() >= 250 || type.getBlue() >= 250 || type.getGreen() >= 250)
+//		if (type.getRed() >= 250 || type.getBlue() >= 250 || type.getGreen() >= 250)
+		if (type == Color.white)
 			return randomColor();
 		else
 			return type;
@@ -37,7 +38,30 @@ public class Fruit
 	
 	public Color randomColor()
 	{
-		return new Color((int)(Math.random()*256),(int)(Math.random()*256),(int)(Math.random()*256));
+//		return new Color((int)(Math.random()*256),(int)(Math.random()*256),(int)(Math.random()*256));
+		int rand = (int)(Math.random()*1000);
+		Color c;
+		switch(rand%5)
+		{
+		case 0:
+			c = Color.CYAN;
+			break;
+		case 1:
+			c = Color.magenta;
+			break;
+		case 2:
+			c = Color.orange;
+			break;
+		case 3:
+			c = Color.white;
+			break;
+		case 4:
+		default:
+			c = Color.YELLOW;
+		}
+		
+		return c;
+		
 	}
 
 	public boolean fall(Fruit[][] field)
@@ -76,11 +100,12 @@ public class Fruit
 		}
 		else
 		{
-//			if (y/40 > 0)
-//			{
-//			field[x/40][y/40-1] = null;
+			if (y/40 > 0)
+			{
+			if (field[x/40][y/40-1] == this)
+				field[x/40][y/40-1] = null;
 //			field[x/40][y/40] = this;
-//			}
+			}
 			y+= 5;
 			animateOffset = 20;
 		}
@@ -169,6 +194,12 @@ public class Fruit
 			animateOffset = 20;
 			if (x > 380)
 				x = -20;
+		
+			if (x/40 > 0 && x < 360 && count == 1)
+			{
+
+				field[x/40+1][y/40] = this;
+			}
 		}
 
 		return moved;
@@ -203,6 +234,12 @@ public class Fruit
 			if (x < -20)
 			{
 				x = 380;
+			}
+			
+			if (x/40 > 0 && count == 1)
+			{
+
+				field[x/40][y/40] = this;
 			}
 		}
 
