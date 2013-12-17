@@ -1,6 +1,6 @@
 import java.awt.Color;
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 public class Fruit 
@@ -31,10 +31,10 @@ public class Fruit
 
 	public Color getColor()
 	{
-		//		if (type.getRed() >= 250 || type.getBlue() >= 250 || type.getGreen() >= 250)
-		if (type == Color.white)
-			return randomColor(false);
-		else
+//				if (type.getRed() >= 250 || type.getBlue() >= 250 || type.getGreen() >= 250)
+//		if (type == Color.white)
+//			return randomColor(false);
+//		else
 			return type;
 	}
 
@@ -58,7 +58,7 @@ public class Fruit
 			c = Color.orange;
 			break;
 		case 3:
-			c = Color.white;
+			c = Color.green;
 			break;
 		case 4:
 		default:
@@ -109,7 +109,7 @@ public class Fruit
 			{
 				if (field[x/40][y/40-1] == this)
 					field[x/40][y/40-1] = null;
-				//			field[x/40][y/40] = this;
+				field[x/40][y/40] = this;
 			}
 			y+= 5;
 			animateOffset = 20;
@@ -168,8 +168,15 @@ public class Fruit
 		if (y>320)
 		{
 			y = -40;
+			touch();
 		}
 
+	}
+
+	private void touch() 
+	{
+		FruitGame.field.remove(this);
+		FruitGame.field.add(this);
 	}
 
 	public boolean moveRight(Fruit[][] field) 
@@ -185,7 +192,6 @@ public class Fruit
 		{
 			x = ((int)(x/40))*40;
 
-
 			field[x/40][y/40] = this;
 
 			moved = true;
@@ -200,12 +206,13 @@ public class Fruit
 			if (x > 380)
 				x = -20;
 
-			if (x/40 > 0 && x < 360 && count == 1)
-			{
-
-				field[x/40+1][y/40] = this;
-			}
-		}
+//			if (x/40 > 0 && x < 320 && count == 1)
+//				field[x/40+1][y/40] = this;
+//			else if (count == 1)
+//				field[0][y/40] = this;
+		}		
+		
+		touch();
 
 		return moved;
 	}
@@ -221,7 +228,7 @@ public class Fruit
 
 		if (moved)
 		{
-			int divisor = (x<20 || x == 360)? 0 : 1;
+			int divisor = (x<20 || x >= 320)? 0 : 1;
 
 			x = ((int)(x/40)+divisor)*40;
 
@@ -241,13 +248,14 @@ public class Fruit
 				x = 380;
 			}
 
-			if (x/40 > 0 && count == 1)
-			{
-
-				field[x/40][y/40] = this;
-			}
+//			if (x/40 > 0 && count == 1)
+//				field[x/40][y/40] = this;
+//			else if (count == 1)
+//				field[9][y/40] = this;
 		}
 
+		touch();
+		
 		return moved;
 	}
 
