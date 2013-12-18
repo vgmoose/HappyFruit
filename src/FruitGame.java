@@ -22,9 +22,12 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 	HashSet<Fruit> moveRightQueue = new HashSet<Fruit>();
 	HashSet<Fruit> moveLeftQueue = new HashSet<Fruit>();
 	
+	int repaintCounter = 0;
+	
 	static boolean debug = true;
 	
 	boolean moveFired = false;
+	boolean finalDrawCheck = false;
 
 
 	Fruit[][] matrix = new Fruit[10][10];
@@ -200,6 +203,7 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 			//			}
 
 			fallingQueue.add(f);
+			finalDrawCheck = true;
 
 //			field.remove(f);
 		}
@@ -222,14 +226,26 @@ public class FruitGame extends JPanel implements ActionListener, MouseListener, 
 		{
 			fallingQueue.remove(f);
 			//field.remove(f);
+			finalDrawCheck = true;
 		}
 
 //		checkMatches(4);
-
-		repaint();
+		if (finalDrawCheck || !fallingQueue.isEmpty() || !moveRightQueue.isEmpty() || !moveLeftQueue.isEmpty())
+			repaint();
 
 	}
 
+	public void repaint()
+	{
+		super.repaint();
+		finalDrawCheck = false;
+		
+		if (debug)
+		{
+			System.out.println("Repainting #"+repaintCounter);
+			repaintCounter++;
+		}
+	}
 
 	private void checkMatches(int chain) 
 	{
